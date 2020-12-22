@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LOTR GIPHY</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div id="buttons">
+        <button data-person="legolas"> Legolas</button>
+        <button data-person="aragorn">Aragorn</button>
+        <button data-person="frodo"> Frodo</button>
+        <button data-person="samwise"> Samwise Gamgee</button>
+        <button data-person="Gandalf">Gandalf</button>
+    </div>
+
+    <div id="gifs-appear-here">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("button").on("click", function() {
+          var person = $(this).attr("data-person");
+          var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            person + "&api_key=KK1mhvLW2s7gxASQmCr299y8NxnQd6om&limit=10";
+    
+          $.ajax({
+            url: queryURL,
+            method: "GET"
+          })
+            .then(function(response) {
+              var results = response.data;
+    
+              for (var i = 0; i < results.length; i++) {
+                var gifDiv = $("<div>");
+    
+                var rating = results[i].rating;
+    
+                var p = $("<p>").text("Rating: " + rating);
+    
+                var personImage = $("<img>");
+                personImage.attr("src", results[i].images.fixed_height.url);
+    
+                gifDiv.prepend(p);
+                gifDiv.prepend(personImage);
+    
+                $("#gifs-appear-here").prepend(gifDiv);
+              }
+            });
+        });
+      </script>
+</body>
+</html>
